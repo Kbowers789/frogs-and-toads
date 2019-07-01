@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    body{
+        background-color: deepskyblue;
+    }
+
+    header{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 175px;
+        font-size: 30px;
+        text-align: center;
+        background-color: lightskyblue;
+        border-bottom: 2px solid #f8f8f8;
+    }
+    button{
+        font-size: 20px;
+        border-radius: 8pt;
+        padding: 15px;
+        margin: 15px;
+    }
+    footer{
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        text-alilgn: center;
+        font-size: 12pt;
+        font-style: italic;
+    }
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(9, 125px);
+        grid-template-rows: 50px 125px 50px;
+        grid-gap: 15px;
+        padding: 10px;
+        justify-content: center;
+        text-align: center;
+        margin-top: 175px;
+    }
+    .grid-container>div {
+        text-align: center;
+        align-items: center;
+    }
+
+    .output{
+        grid-row: 1;
+        grid-column-start: 1;
+        grid-column-end: 10;
+        text-align: center;
+        font-size: 25pt;
+        padding: 0 0 0 30px;
+    }
+    .item1 {
+        grid-column: 1;
+        grid-row: 2;
+        background: url("lp_enhanced2.png") center bottom;
+        background-size: contain;
+        padding: 20px 0 0 0;
+    }
+    .item2 {
+        grid-column: 2;
+        grid-row: 2;
+        background: url("lp_enhanced2.png") no-repeat center bottom;
+        background-size: cover;
+        padding: 20px 0 0 0;
+    }
+    .item3 {
+        grid-column: 3;
+        grid-row: 2;
+        background: url("lp_enhanced2.png") center bottom;
+        padding: 20px 0 0 0;
+    }
+    .item4 {
+        grid-column: 4;
+        grid-row: 2;
+        background: url("lp_enhanced2.png") center bottom;
+        background-size: contain;
+        padding: 20px 0 0 0;
+    }
+    .item5 {
+        grid-column: 5;
+        grid-row: 2;
+        background: url("lp_enhanced2.png") center bottom;
+        background-size: contain;
+        padding: 20px 0 0 0;
+    }
+    .item6 {
+        grid-column: 6;
+        grid-row: 2;
+        background: url("lp_enhanced2.png") center bottom;
+        background-size: contain;
+        padding: 20px 0 0 0;
+    }
+    .item7 {
+        grid-column: 7;
+        grid-row: 2;
+        background: url("lp_enhanced2.png") center bottom;
+        background-size: contain;
+        padding: 20px 0 0 0;
+    }
+    .item8 {
+        grid-column: 8;
+        grid-row: 2;
+        background: url("lp_enhanced2.png") center bottom;
+        background-size: contain;
+        padding: 20px 0 0 0;
+    }
+    .item9 {
+        grid-column: 9;
+        grid-row: 2;
+        background: url("lp_enhanced2.png") center bottom;
+        background-size: contain;
+        padding: 20px 0 0 0;
+    }
+    .buttons{
+        grid-column-start: 4;
+        grid-column-end: 7;
+        grid-row: 3
+    }
+
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>F & T Child test</title>
+</head>
+<body>
+<header>
+    <h1>Frogs & Toads Puzzle</h1>
+</header>
+
+<div class="grid-container">
+    <p class= "output" id="moves">
+        Total Moves: 0
+    </p>
+    <div class="spot item1" id="b1" onclick="swap(this.id)">
+        <img class="frog" src="frog_only2.png" id = "frog1" alt="frog1" height="75" width="75">
+    </div>
+    <div class="spot item2" id="b2" onclick="swap(this.id)">
+        <img class="frog" src="frog_only2.png" id = "frog2" alt="frog2" height="75" width="75">
+    </div>
+    <div class="spot item3" id="b3" onclick="swap(this.id)">
+        <img class="frog" src="frog_only2.png" id = "frog3" alt="frog3" height="75" width="75">
+    </div>
+    <div class="spot item4" id="b4" onclick="swap(this.id)">
+        <img class="frog" src="frog_only2.png" id = "frog4" alt="frog4" height="75" width="75">
+    </div>
+    <div class="spot item5" id="b5" onclick="swap(this.id)">
+        <img class="empty" src="empty.png" id = "empty" alt="empty" height="75" width="75">
+    </div>
+    <div class="spot item6" id="b6" onclick="swap(this.id)">
+        <img class="toad" src="toad_only2.png" id = "toad1" alt="toad1" height="75" width="75">
+    </div>
+    <div class="spot item7" id="b7" onclick="swap(this.id)">
+        <img class="toad" src="toad_only2.png" id = "toad2" alt="toad2" height="75" width="75">
+    </div>
+    <div class="spot item8" id="b8" onclick="swap(this.id)">
+        <img class="toad" src="toad_only2.png" id = "toad3" alt="toad3" height="75" width="75">
+    </div>
+    <div class="spot item9"  id="b9" onclick="swap(this.id)">
+        <img class="toad" src="toad_only2.png" id = "toad4" alt="toad4" height="75" width="75">
+    </div>
+    <div class="buttons">
+        <button id="undo" onclick="undo()">
+            Undo
+        </button>
+        <button id="restart" onclick="location.reload()">
+            Restart
+        </button>
+    </div>
+</div>
+<script>
+    // 'empty' is variable to keep current column location of "empty" lilypad div object
+    let empty = 5;
+    let moves = 0;
+    let turns = [["n/a", 0, 0, 0]];
+
+    // function to access the last entry in the turn log, and reverse the documented flip,
+    // then remove the history of that turn from thr log
+    function undo(){
+        // if condition will catch if the turn log has no documented moves
+        // (i.e. only the first default move is in the array)
+        // this is to prevent any walking on memory by "under-referencing" indexes in the array
+        if (turns.length > 1){
+            // grabbing the last object moved, and it's starting and ending column numbers
+            let lastClick = turns[turns.length-1][0];
+            let swapto = "b" + turns[turns.length-1][2];
+
+            // making the swap and updating moves count and empty pointer
+            let swap1 = document.getElementById(swapto).removeChild(document.getElementById(swapto).children[0]);
+            let swap2 = document.getElementById(lastClick).appendChild(document.getElementById(lastClick).children[0]);
+            document.getElementById(swapto).appendChild(swap2);
+            document.getElementById(lastClick).appendChild(swap1);
+
+            empty = turns[turns.length-1][2];
+            moves = moves+1;
+            document.getElementById("moves").innerHTML = "Total Moves: "+ moves;
+
+            // removing the turn from the log
+            turns.pop();
+        }
+        else {
+            alert("There are no more moves to undo!");
+        }
+    }
+
+    function checkDeadEnd(empty){
+        // checking against 'dead end' conditions - if found, game ends and player loses
+        let res = true;
+        let left2 = "b"+ (empty-2);
+        let left1 = "b"+ (empty-1);
+        let center = "b"+ (empty);
+        let right1 = "b"+ (empty+1);
+        let right2 = "b"+ (empty+2);
+
+        if (document.getElementById("b1").children[0].className === "empty"){
+            if (document.getElementById("b2").children[0].className === "frog") {
+                if (document.getElementById("b3").children[0].className === "frog") {
+                    res = false;
+                }
+            }
+        }
+        if (document.getElementById("b9").children[0].className === "empty"){
+            if (document.getElementById("b8").children[0].className === "toad") {
+                if (document.getElementById("b7").children[0].className === "toad") {
+                    res = false;
+                }
+            }
+        }
+        if (document.getElementById(left2).children[0].className === "toad"){
+            if (document.getElementById(left1).children[0].className === "toad") {
+                if (document.getElementById(center).children[0].className === "empty") {
+                    if (document.getElementById(right1).children[0].className === "frog") {
+                        if (document.getElementById(right2).children[0].className === "frog") {
+                            res = false;
+                        }
+                    }
+                }
+            }
+        }
+        if (document.getElementById("b1").children[0].className === "toad" &&
+            document.getElementById("b2").children[0].className === "empty" &&
+            document.getElementById("b3").children[0].className === "frog" &&
+            document.getElementById("b4").children[0].className === "frog"){
+            res = false;
+        }
+        if (document.getElementById("b6").children[0].className === "toad" &&
+            document.getElementById("b7").children[0].className === "toad" &&
+            document.getElementById("b8").children[0].className === "empty" &&
+            document.getElementById("b9").children[0].className === "frog"){
+            res = false;
+        }
+        return res;
+    }
+
+    function checkWin(){
+        let res = false;
+        //checking against the only "win" configuration - as soon as a match within the nesting loops fails,
+        if (document.getElementById("b1").children[0].className === "toad"){
+            if (document.getElementById("b2").children[0].className === "toad"){
+                if(document.getElementById("b3").children[0].className === "toad"){
+                    if (document.getElementById("b4").children[0].className === "toad"){
+                        if (document.getElementById("b5").children[0].className === "empty"){
+                            if (document.getElementById("b6").children[0].className === "frog"){
+                                if(document.getElementById("b7").children[0].className === "frog"){
+                                    if (document.getElementById("b8").children[0].className === "frog"){
+                                        if  (document.getElementById("b9").children[0].className === "frog"){
+                                            res = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    // function to run on a click event from all board div elements, where the id of the clicked div is passed in
+    function swap(target) {
+        let slide, hop, canContinue, gameOver;
+        // target = id of the div that was clicked, from there we can get the target's column number
+        let x = Number(target.charAt(1));
+        // getting div id of empty lilypad based on "empty" variable, which represents the column of the empty div
+        let y = empty;
+        let goal = "b" + y;
+        // double checking that we have the right column - div should have no elements/children
+        // if it does contain children (ie an image element), we need to find the right spot
+        if(document.getElementById(goal).children[0].id !== "empty"){
+            alert("Bad data! finding empty lilypad...");
+            // looping through all divs in 'spot' class, and finding the (theoretically) only empty one and it's column
+            let allspots = document.getElementsByClassName("spot");
+            for (let i = 0; i < allspots.length; i++){
+                if (!allspots[i].hasChildNodes()){
+                    y = Number(allspots[i].id.charAt(1));
+                    goal = "b" + y;
+                }
+            }
+        }
+
+        // finding class (frog/toad) of image in target div, and creating a temporary "pointer" to the whole node
+        let imgnode = document.getElementById(target).children[0];
+        let imgcl = imgnode.classList[0];
+        // deciding if target's image can move, based on it's class, and it's respective legal moves
+        let goodmove = false;
+        if (imgcl === "frog"){
+            slide = x+1;
+            hop = x+2;
+            if (y === slide){
+                // if empty column is directly right of target (frog can slide over)
+                y = slide;
+                goodmove = true;
+            }
+            else if(y === hop && document.getElementById("b"+slide).children[0].className === "toad"){
+                // if empty column is two spot to the right of target, AND a toad is between (frog can hop over)
+                y = hop;
+                goodmove = true;
+            }
+        }
+        if (imgcl === "toad"){
+            slide = x-1;
+            hop = x-2;
+            if (y === slide){
+                // if empty column is directly left of target (toad can slide over)
+                y = slide;
+                goodmove = true;
+            }
+            else if (y === hop && document.getElementById("b"+slide).children[0].className === "frog"){
+                // if empty column is two spot to the left of target, AND a frog is between (toad can hop over)
+                y = hop;
+                goodmove = true;
+            }
+        }
+
+        // if a legal move is found, "swap" the target image from the current column (div) to the empty column (div)
+        // and update the "empty" tracking variable to the new column number
+        if (goodmove){
+            // moving image (the first/only child in the target div element) to the empty column
+            // and updating empty to new column number
+            let temp1 = document.getElementById(target).removeChild(document.getElementById(target).children[0]);
+            let temp2 = document.getElementById(goal).removeChild(document.getElementById(goal).children[0]);
+            document.getElementById(goal).appendChild(temp1);
+            document.getElementById(target).appendChild(temp2);
+            empty = x;
+            // updating moves count, and adding to turns list
+            moves += 1;
+            turns.push([target, x, y, moves]);
+            document.getElementById("moves").innerHTML = "Total Moves: "+ moves;
+        }
+        else{
+            alert("The move you are trying to do is not possible.");
+        }
+
+        // checking the newest board arrangement against the only winning arrangement, and the possible dead end situations
+        canContinue = checkDeadEnd(y);
+        gameOver = checkWin();
+        if (!canContinue){
+            // a dead end condition was found, now generates a pop up letting the player know, and giving them a choice on how to continue
+            alert("Oops... sorry, you didn't solve the puzzle!\n\nUndo one or more moves to keep trying, or restart.");
+            // no automatic change to game board - in case player wants to undo and keep trying
+        }
+        if(gameOver){
+            // met the condition for winning the game, now generates a pop up message with the player's results
+            let wintext = "Congratulations!\n\nYou solved the puzzle in ";
+            wintext += moves + " moves.\n\n";
+            if (moves === 24){
+                wintext += "That was PERFECT! You used the minimum possible moves!";
+            }
+            else if (24 < moves <= 29){
+                wintext += "That was VERY GOOD! You were only a few moves away from the minimum 24!"
+            }
+            else if (29 < moves <= 34){
+                wintext += "That was OKAY! The minimum moves needed is 24, see if you can do better!"
+            }
+            else if (moves > 34){
+                wintext += "Nice! But you also NEED IMPROVEMENT. Try again, but aim for only making 24 moves."
+            }
+            let r = confirm(wintext);
+            //automatically resets the board on closing of popup window
+            if (r){
+                location.reload();
+            }
+        }
+
+    }
+</script>
+<footer class="authors">
+    December 2018</br>
+    Authors: Gargi Agravat, Katherine Bowers, Paul Eisle, Robert Fus,
+    Prasanna Bharath Kumar Polagani, and Sunishma Reddy Suram
+</footer>
+</body>
+</html>

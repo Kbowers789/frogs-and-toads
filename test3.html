@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    body{
+        background-color: deepskyblue;
+    }
+
+    header{
+        font-size: 40px;
+        text-align: center;
+        background-color: lightskyblue;
+    }
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(9, 125px);
+        grid-template-rows: 30px 125px 30px;
+        grid-gap: 10px;
+        padding: 10px;
+        justify-content: center;
+        text-align: center;
+    }
+    .grid-container>div {
+        text-align: center;
+        align-items: center;
+    }
+
+    .output{
+        grid-row: 1;
+        grid-column-start: 1;
+        grid-column-end: 9;
+        text-align: center;
+        font-size: 20px;
+    }
+    .item1 {
+        grid-column: 1;
+        grid-row: 2;
+        background: url("lp_enhanced2.png") center bottom;
+        background-size: contain;
+        padding: 20px 0 0 0;
+    }
+    .item2 {
+        grid-column: 2;
+        grid-row: 2;
+        background: url("lp_enhanced2.png") no-repeat center bottom;
+        background-size: cover;
+        padding: 20px 0 0 0;
+    }
+    .item3 {
+        grid-column: 3;
+        grid-row: 2;
+        background: url("lp_enhanced2.png") center bottom;
+        padding: 20px 0 0 0;
+    }
+    .item4 {
+        grid-column: 4;
+        grid-row: 2;
+        background: url("lp_enhanced2.png") center bottom;
+        background-size: contain;
+        padding: 20px 0 0 0;
+    }
+    .item5 {
+        grid-column: 5;
+        grid-row: 2;
+        background: url("lp_enhanced2.png") center bottom;
+        background-size: contain;
+        padding: 20px 0 0 0;
+    }
+    .item6 {
+        grid-column: 6;
+        grid-row: 2;
+        background: url("lp_enhanced2.png") center bottom;
+        background-size: contain;
+        padding: 20px 0 0 0;
+    }
+    .item7 {
+        grid-column: 7;
+        grid-row: 2;
+        background: url("lp_enhanced2.png") center bottom;
+        background-size: contain;
+        padding: 20px 0 0 0;
+    }
+    .item8 {
+        grid-column: 8;
+        grid-row: 2;
+        background: url("lp_enhanced2.png") center bottom;
+        background-size: contain;
+        padding: 20px 0 0 0;
+    }
+    .item9 {
+        grid-column: 9;
+        grid-row: 2;
+        background: url("lp_enhanced2.png") center bottom;
+        background-size: contain;
+        padding: 20px 0 0 0;
+    }
+    .buttons{
+        grid-column-start: 4;
+        grid-column-end: 6;
+        grid-row: 3
+
+    }
+
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Frogs & Toads Puzzle</title>
+</head>
+<body>
+<header>
+    <h1>Frogs & Toads Puzzle</h1>
+    <hr>
+</header>
+
+<div class="grid-container">
+    <p class= "output" id="moves">
+        Total Moves: 0
+    </p>
+    <div class="spot item1 frog" id="b1" onclick="swap(this.id)">
+        <img class="boardobj" src="frog_only2.png" alt="frog1" height="75" width="75">
+    </div>
+    <div class="spot item2 frog" id="b2" onclick="swap(this.id)">
+        <img class="boardobj" src="frog_only2.png" alt="frog2" height="75" width="75">
+    </div>
+    <div class="spot item3 frog" id="b3" onclick="swap(this.id)">
+        <img class="boardobj" src="frog_only2.png" alt="frog3" height="75" width="75">
+    </div>
+    <div class="spot item4 frog" id="b4" onclick="swap(this.id)">
+        <img class="boardobj" src="frog_only2.png" alt="frog4" height="75" width="75">
+    </div>
+    <div class="spot item5 empty" id="b5" onclick="swap(this.id)">
+    </div>
+    <div class="spot item6 toad" id="b6" onclick="swap(this.id)">
+        <img class="boardobj" src="toad_only2.png" alt="toad1" height="75" width="75">
+    </div>
+    <div class="spot item7 toad" id="b7" onclick="swap(this.id)">
+        <img class="boardobj" src="toad_only2.png" alt="toad2" height="75" width="75">
+    </div>
+    <div class="spot item8 toad" id="b8" onclick="swap(this.id)">
+        <img class="boardobj" src="toad_only2.png" alt="toad3" height="75" width="75">
+    </div>
+    <div class="spot item9 toad"  id="b9" onclick="swap(this.id)">
+        <img class="boardobj" src="toad_only2.png" alt="toad4" height="75" width="75">
+    </div>
+    <div class="buttons">
+        <button id="undo" onclick="undo()">
+            Undo
+        </button>
+        <button id="restart" onclick="restart()">
+            Restart
+        </button>
+    </div>
+</div>
+
+<div class="output" id="turns">
+</div>
+<script>
+    let moves = 0;
+    let turns = [["n/a", 0, 0, 0]];
+
+    // function to reset the game board and moves to the initial default to start a new game
+    function restart(){
+        //resetting board to initial state
+
+        // resetting move counter
+        moves = 0;
+        // emptying the turn log of all previous moves
+        while (turns.length > 1) {
+            turns.pop();
+        }
+        //updating page elements
+        document.getElementById("moves").innerHTML = "Total Moves: "+String(moves);
+        let trn_op = "";
+        for (let j = 0; j < turns.length; j++){
+            trn_op += turns[j] + "</br>";
+        }
+        alert(turns);
+        document.getElementById("turns").innerHTML = trn_op;
+    }
+
+    // function to access the last entry in the turn log, and reverse the documented flip,
+    // then remove the history of that turn from thr log
+    function undo(){
+        // if condition will catch if the turn log has no documented moves
+        // (i.e. only the first default move is in the array)
+        // this is to prevent an attempt to access indexes or items that do not exist, and thus avoiding an error
+        if (turns.length > 1){
+            // grabbing the last object moved, and it's starting and ending column numbers, and what it was swapped with
+            let lastClick = turns[turns.length-1][0];
+            let swapfrom = turns[turns.length-1][1];
+            let swapto = turns[turns.length-1][2];
+            // making the swa
+
+            document.getElementById(lastClick).style.gridColumn = swapfrom;
+            document.getElementById(new2).style.gridColumn = swapto;
+            document.getElementById(new1).setAttribute("id", "temp");
+            document.getElementById(new2).setAttribute("id", new1);
+            document.getElementById("temp").setAttribute("id", new2);
+            moves = moves+1;
+
+            // removing the turn from the log
+            turns.pop();
+
+            // NOTE: the move count is incremented, NOT decremented
+            ++moves;
+        }
+        else {
+            alert("There are no more moves to undo!");
+        }
+    }
+
+    function checkDeadEnd(empty){
+        // checking against 'dead end' conditions - if found, game ends and player loses
+        let res = true;
+        let left2 = "b"+String(empty-2);
+        let left1 = "b"+String(empty-1);
+        let center = "b"+String(empty);
+        let right1 = "b"+String(empty+1);
+        let right2 = "b"+String(empty+2);
+
+        if (document.getElementById("b1").classList.item(2) === "empty"){
+            if (document.getElementById("b2").classList.item(2) === "frog") {
+                if (document.getElementById("b3").classList.item(2) === "frog") {
+                    res = false;
+                }
+            }
+        }
+        if (document.getElementById("b9").classList.item(2) === "empty"){
+            if (document.getElementById("b8").classList.item(2) === "toad") {
+                if (document.getElementById("b7").classList.item(2) === "toad") {
+                    res = false;
+                }
+            }
+        }
+        if (document.getElementById(left2).classList.item(2) === "toad"){
+            if (document.getElementById(left1).classList.item(2) === "toad") {
+                if (document.getElementById(center).classList.item(2) === "empty") {
+                    if (document.getElementById(right1).classList.item(2) === "frog") {
+                        if (document.getElementById(right2).classList.item(2) === "frog") {
+                            res = false;
+                        }
+                    }
+                }
+            }
+        }
+        if (document.getElementById("b1").classList.item(2) === "toad" &&
+                document.getElementById("b2").classList.item(2) === "empty" &&
+                    document.getElementById("b3").classList.item(2) === "frog" &&
+                        document.getElementById("b4").classList.item(2) === "frog"){
+            res = false;
+        }
+        if (document.getElementById("b6").classList.item(2) === "toad" &&
+                document.getElementById("b7").classList.item(2) === "toad" &&
+                    document.getElementById("b8").classList.item(2) === "empty" &&
+                        document.getElementById("b9").classList.item(2) === "frog"){
+            res = false;
+        }
+        return res;
+    }
+
+    function checkWin(){
+        let res = false;
+        //checking against the only "win" configuration - as soon as a match within the nesting loops fails,
+        if (document.getElementById("b1").classList.item(2) === "toad"){
+            if (document.getElementById("b2").classList.item(2) === "toad"){
+                if(document.getElementById("b3").classList.item(2) === "toad"){
+                    if (document.getElementById("b4").classList.item(2) === "toad"){
+                        if(document.getElementById("b5").classList.item(2) === "empty"){
+                            if (document.getElementById("b6").classList.item(2) === "frog"){
+                                if(document.getElementById("b7").classList.item(2) === "frog"){
+                                    if (document.getElementById("b8").classList.item(2) === "frog"){
+                                        if  (document.getElementById("b9").classList.item(2) === "frog"){
+                                            res = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    function swap(new1) {
+        let slide, hop;
+        let x = Number(new1.charAt(1));
+        let new2 = document.getElementsByClassName("empty")[0].id;
+        let y = Number(new2.charAt(1));
+        let cl1 = document.getElementById(new1).classList.item(2);
+        let check = false;
+        x = Number(x);
+        if (cl1 === "frog"){
+            slide = x+1;
+            hop = x+2;
+            if (y === slide){
+                y = slide;
+                check = true;
+            }
+            else if(y === hop && document.getElementById("b"+slide).classList.item(2) === "toad"){
+                y = hop;
+                check = true;
+            }
+        }
+        else if (cl1 === "toad"){
+            slide = x-1;
+            hop = x-2;
+            if (y === slide){
+                y = slide;
+                check = true;
+            }
+            else if(y === hop && document.getElementById("b"+String(slide)).classList.item(2) === "frog"){
+                y = hop;
+                check = true;
+            }
+        }
+        else{
+            alert("You can't select the empty lilypad! Select a spot with a frog or a toad.")
+        }
+        let canContinue = checkDeadEnd(y);
+        let gameOver = checkWin();
+        alert("canContinue = "+canContinue+"\ngameOver = "+gameOver);
+        if (!canContinue){
+            alert("There are no more possible moves! Undo one or more moves to keep trying, or restart.");
+            // no automatic change to game board
+        }
+        if(gameOver){
+            alert("Congrats! You win!");
+            // save name in database?
+            //automatic board restart on closing of popup window?
+        }
+        if (check){
+            document.getElementById(new1).style.gridColumn = String(y);
+            document.getElementById(new2).style.gridColumn = String(x);
+            document.getElementById(new1).setAttribute("id", "temp");
+            document.getElementById(new2).setAttribute("id", new1);
+            document.getElementById("temp").setAttribute("id", new2);
+            moves = moves+1;
+            turns.push([new1, x, y, moves]);
+            document.getElementById("moves").innerHTML = "Total Moves: "+String(moves);
+            let trn_op = "";
+            for (let j = 0; j < turns.length; j++){
+                trn_op += turns[j] + "</br>";
+            }
+            alert(turns);
+            document.getElementById("turns").innerHTML = trn_op;
+        }
+        else{
+            alert("Not possible, try a different spot!");
+        }
+    }
+</script>
+</body>
+</html>

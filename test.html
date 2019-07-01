@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    .display{
+        display: grid;
+        grid-gap: 10px;
+            grid-template-columns: 35% 65%;
+        border-radius: 10px;
+        padding: 20px;
+    }
+        .text{
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.25em;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: gainsboro;
+        }
+        .textbox{
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: normal;
+            word-spacing: 10px;
+            padding: 20px;
+        }
+        .buttons{
+            grid-row: 2;
+            grid-column: 2;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .arr{
+            grid-column: 2;
+            grid-row: 1;
+        }
+        .trn{
+            grid-column: 1;
+            grid-row: 1/4;
+            font-size: 1.25em;
+            word-spacing: 10px;
+        }
+
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Button Testing</title>
+    <script>
+        // main game object variable declarations (characters are place holders for now)
+        // and setup of turn log, moves counter and game board array
+        let T1 = "T1";
+        let T2 = "T2";
+        let T3 = "T3";
+        let T4 = "T4";
+        let F1 = "F1";
+        let F2 = "F2";
+        let F3 = "F3";
+        let F4 = "F4";
+        let lp = "__";
+
+        let moves = 0;
+        let turns = [[F1, 0, 0, 0]];
+        let prints = [F1, F2, F3, F4, lp, T1, T2, T3, T4];
+
+        // Place-holder function to 'flip' two objects in the board array
+        // **Using random number generation in place of player selection**
+        function flipVars (arr){
+            let x = Math.floor(Math.random() * (8 + 1));
+            let y = Math.floor(Math.random() * (8 + 1));
+            if (x === y){
+                if (y >= 5){
+                    y -= 2;
+                }
+                else{
+                    y +=2;
+                }
+            }
+            // swapping two objects based on the indexes 'chosen' above
+            let temp = arr[x];
+            arr.splice(x, 1, arr[y]);
+            arr.splice(y, 1, temp);
+            ++moves;
+            // adding move to the turn log
+            turns.push([temp, x, y, moves]);
+            return arr;
+        }
+
+        // function to reset the game board and moves to the initial default
+        function reset(arr){
+            arr.splice(0, 4, F1, F2, F3, F4);
+            arr.splice(4, 1, lp);
+            arr.splice(5, 4, T1, T2, T3, T4);
+            moves = 0;
+            // emptying the turn log of all previous moves
+            while (turns.length > 1){
+                turns.pop();
+            }
+            return arr;
+        }
+
+        // function to print the contents of the array in the browser window
+        // (called by the functions linked to the html buttons)
+        function printArr(arr){
+            let output1 = document.getElementById("tb-1");
+            let output2 = document.getElementById("tb-2");
+            let op = "";
+            for(let i = 0; i< arr.length; i++){
+                op += arr[i] + " ";
+            }
+            output1.innerHTML = op;
+            output2.innerHTML = "Moves: " + moves;
+        }
+
+        // function to display the (formatted) current contents of
+        // the game board array, the moves counter, and the turn log
+        // Used ONLY to verify the printArr() function is correctly outputting data
+        // from the main variables, and not any locally-declared variables that will be deleted
+        function checkArr(){
+            let output1 = document.getElementById("tb-3");
+            let output2 = document.getElementById("tb-4");
+            let output3 = document.getElementById("tb-5");
+            let op = "";
+            for(let i = 0; i< prints.length; i++){
+                op += (prints[i] + " ");
+            }
+            output1.innerHTML = op;
+            output2.innerHTML = "Moves: " + moves;
+            let trn_op = ""/*"Obj Start End Move</br>";*/
+            for (let j = 0; j < turns.length; j++){
+                trn_op += turns[j].join(" - ") + "</br>";
+            }
+            output3.innerHTML = trn_op;
+        }
+
+        // function to access the last entry in the turn log, and reverse the documented flip,
+        // then remove the history of that turn from thr log
+        function undo(arr, prev){
+            // if condition will catch if the turn log has no documented moves
+            // (i.e. only the first default move is in the array)
+            // this is to prevent an attempt to access indexes or items that do not exist, and thus avoiding an error
+            if (turns.length > 1){
+                // grabbing the starting and ending indexes for the object
+                let x = prev[1];
+                let y = prev[2];
+                // making the swap in the board array
+                let temp = arr[x];
+                arr.splice(x, 1, arr[y]);
+                arr.splice(y, 1, temp);
+                // removing the turn from the log
+                turns.pop();
+                // NOTE: the move count is incremented, NOT decremented
+                ++moves;
+            }
+            else {
+                alert("There are no more moves to undo!");
+            }
+            return arr;
+        }
+    </script>
+</head>
+<body>
+<div class="display">
+    <div id="array-display" class="text arr">
+       Game Board
+        <div id="tb-1" class="textbox tb1"></div>
+        <div id="tb-2" class="textbox tb2"></div>
+    </div>
+    <div class="buttons">
+        <button id="button1" class="btn b1" onclick="button1(prints);">
+            Flip Two
+        </button>
+        <button id="button4" class="btn b4" onclick="button4(prints, turns[turns.length-1]);">
+            Undo
+        </button>
+        <button id="button2" class="btn b2" onclick="button2(prints);">
+            Restart
+        </button>
+        <button id="button3" class="btn b3" onclick="button3();">
+            Check Memory
+        </button>
+    </div>
+    <div id="mem-display" class="text mem">
+        Objects in Memory
+        <div id="tb-3" class="textbox tb3"></div>
+        <div id="tb-4" class="textbox tb4"></div>
+    </div>
+    <div id="trn-display" class="text trn">
+        Turns Log
+        <br>
+        (Object - Start - End - Move)
+        <div id="tb-5" class="textbox tb5"></div>
+    </div>
+</div>
+<script language="javascript" type="text/javascript">
+    <!--
+    // these are the 'wrapper' functions created to link the html button objects
+    // and the js game functions together
+    function button1(arr){
+        arr = flipVars(arr);
+        printArr(arr);
+    }
+    function button2(arr){
+        arr = reset(arr);
+        printArr(arr);
+    }
+    function button3(){
+        checkArr();
+    }
+    function button4(arr, prev){
+        arr = undo(arr, prev);
+        printArr(arr);
+    }
+
+    // providing an initial print out of the game board
+    // rather than starting with blank text areas
+    printArr(prints);
+    //-->
+</script>
+</body>
+</html>
